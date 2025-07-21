@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bizone-ti-lib"
+description = "BI.ZONE library for TI"
+readme = "README.md"
+requires-python = ">=3.11"
+dynamic = ["dependencies", "version"]
+
+[tool.setuptools.packages]
+find = {}
+
+[tool.setuptools.dynamic]
+version = {attr = "bizone_ti.__version__.VERSION"}
+dependencies = {file = ["requirements.txt"]}

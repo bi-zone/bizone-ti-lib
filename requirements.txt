@@ -1,0 +1,2 @@
+requests==2.32.3 # Apache 2.0
+ujson==5.10.0 # BSD
