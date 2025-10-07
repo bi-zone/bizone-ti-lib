@@ -31,12 +31,18 @@ class IoCIPv6(models.BaseIoC):
     data: list[models.IoCIPv6Data]
 
 
+@dataclasses.dataclass
+class IoCEmail(models.BaseIoC):
+    data: list[models.IoCEmailData]
+
+
 IoC_Entity_2_TIObject = {
     "url": IoCURL,
     "fqdn": IoCFQDN,
     "ipv4": IoCIPv4,
     "file": IoCFile,
     "ipv6": IoCIPv6,
+    "email": IoCEmail,
 }
 
 
@@ -48,7 +54,8 @@ class IoC():
                     IoCFQDN,
                     IoCIPv4,
                     IoCFile,
-                    IoCIPv6
+                    IoCIPv6,
+                    IoCEmail,
                 ]:
         entity = raw_data["entity"]
         return IoC_Entity_2_TIObject[entity].from_dict(raw_data,

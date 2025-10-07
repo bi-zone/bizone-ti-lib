@@ -161,3 +161,13 @@ class IoCIPv6Data(CommonIoCData):
     asn: str
     fqdns: list[FQDN]
     port: list[Port]
+
+
+@dataclasses.dataclass
+class IoCEmailData(CommonIoCData):
+    _: dataclasses.KW_ONLY
+    attachments: list[str] = dataclasses.field(default_factory=lambda: [])
+    body: str = dataclasses.field(default="")
+    sender_servers: list[str] = dataclasses.field(default_factory=lambda: [])
+    urls: list[URL]
+    header: list[str] = dataclasses.field(default_factory=lambda: [])

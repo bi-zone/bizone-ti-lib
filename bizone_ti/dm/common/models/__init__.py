@@ -15,6 +15,7 @@ from .ioc import (
     IoCIPv4Data,
     IoCFileData,
     IoCIPv6Data,
+    IoCEmailData,
     BaseIoC,
 )
 
@@ -35,4 +36,5 @@ __all__ = [
     "BaseIoC",
     "BaseGroup",
     "TTPSData",
+    "IoCEmailData",
 ]

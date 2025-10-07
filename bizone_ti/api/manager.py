@@ -99,12 +99,13 @@ class ApiManager:
         entity_id: str,
         resource: str,
         payload: dict,
+        params: dict,
     ) -> ti_reponse.Response:
 
         status_code, response = self.request.patch_resource(
             resource=resource,
             url_path=f"{entity_id}/linked",
-            params=None,
+            params=params,
             payload=payload)
 
         return ti_reponse.Response(

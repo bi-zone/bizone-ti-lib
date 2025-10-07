@@ -16,6 +16,7 @@ from bizone_ti.entities import (
     IoCIPv6Entity,
     IoCIPv4Entity,
     IoCURLEntity,
+    IoCEmailEntity,
     IOC_TYPE_2_ENTITY_OBJECT)
 
 
@@ -75,6 +76,17 @@ class GeneralEntityIoC:
         skip_mismatched_types: bool = False,
     ) -> IoCFQDNEntity: ...
 
+    @typing.overload
+    @classmethod
+    def from_ti(  # noqa: E704
+        cls,
+        entity_type: typing.Literal[
+            types.IoCTypes.email,
+            "email"],
+        raw_data: dict,
+        skip_mismatched_types: bool = False,
+    ) -> IoCEmailEntity: ...
+
     @classmethod
     def from_ti(  # noqa: E704
         cls,
@@ -89,6 +101,7 @@ class GeneralEntityIoC:
         IoCFileEntity,
         IoCIPv6Entity,
         IoCURLEntity,
+        IoCEmailEntity,
         None
     ]:
         return IOC_TYPE_2_ENTITY_OBJECT[entity_type].from_dict(

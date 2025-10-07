@@ -18,7 +18,7 @@ class Industries(enum.Enum):
     insurance = "Insurance"
     manufacturing = "Manufacturing"
     media = "Media"
-    public_services = "Public+Services"
+    public_services = "Public services"
     resources = "Resources"
     retail = "Retail"
     science = "Science"
