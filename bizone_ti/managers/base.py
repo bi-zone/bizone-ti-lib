@@ -66,6 +66,7 @@ class BaseObjectPropertyManager:
         cursor: str = None,
         limit: int = None,
         removed: bool = False,
+        ignore_timeout: bool = True
     ) -> ti_response.ResponseGenerator:
         """This method uses for getting all linked  iocs&groups
            to specified group from TI.
@@ -83,6 +84,7 @@ class BaseObjectPropertyManager:
             "limit": limit,
             "cursor": cursor,
             "removed": removed,
+            "ignore-timeout": ignore_timeout,
         }
 
         return self.manager.linked(
@@ -96,7 +98,12 @@ class BaseObjectPropertyManager:
         self,
         entity_id: str,
         object_ids: list,
+        ignore_timeout: bool = True
     ) -> ti_response.Response:
+        query_params = {
+            "ignore-timeout": ignore_timeout,
+        }
+
         payload = {
             "patch": {
                 "add": object_ids,
@@ -107,13 +114,19 @@ class BaseObjectPropertyManager:
             resource=self.resource,
             entity_id=entity_id,
             payload=payload,
+            params=query_params,
         )
 
     def unlink(
         self,
         entity_id: str,
         object_ids: list,
+        ignore_timeout: bool = True
     ) -> ti_response.Response:
+        query_params = {
+            "ignore-timeout": ignore_timeout,
+        }
+
         payload = {
             "patch": {
                 "remove": object_ids,
@@ -124,6 +137,7 @@ class BaseObjectPropertyManager:
             resource=self.resource,
             entity_id=entity_id,
             payload=payload,
+            params=query_params,
         )
 
     def delete(self, **kwargs):
@@ -133,31 +147,40 @@ class BaseObjectPropertyManager:
 class BaseIoCEntityManager(BaseObjectPropertyManager):
 
     def linked(
-        self, cursor: str = None, limit: int = None, removed: bool = False
+        self,
+        cursor: str = None,
+        limit: int = None,
+        removed: bool = False,
+        ignore_timeout: bool = True
     ) -> ti_response.ResponseGenerator:
         return super().linked(
             entity_id=self.common_id,
             cursor=cursor,
             limit=limit,
-            removed=removed
+            removed=removed,
+            ignore_timeout=ignore_timeout
         )
 
     def make_link(
         self,
         object_ids: list,
+        ignore_timeout: bool = True
     ) -> ti_response.Response:
         return super().make_link(
             entity_id=self.common_id,
             object_ids=object_ids,
+            ignore_timeout=ignore_timeout
         )
 
     def unlink(
         self,
         object_ids: list,
+        ignore_timeout: bool = True
     ) -> ti_response.Response:
         return super().unlink(
             entity_id=self.common_id,
             object_ids=object_ids,
+            ignore_timeout=ignore_timeout
         )
 
     def delete(self, value: str, source: str
@@ -178,32 +201,41 @@ class BaseIoCEntityManager(BaseObjectPropertyManager):
 class BaseGroupEntityManager(BaseObjectPropertyManager):
 
     def linked(
-        self, cursor: str = None, limit: int = None, removed: bool = False
+        self,
+        cursor: str = None,
+        limit: int = None,
+        removed: bool = False,
+        ignore_timeout: bool = True
     ) -> ti_response.ResponseGenerator:
         _, group_id = self.id.split(":")
         return super().linked(
             entity_id=group_id,
             cursor=cursor,
             limit=limit,
-            removed=removed
+            removed=removed,
+            ignore_timeout=ignore_timeout
         )
 
     def make_link(
         self,
         object_ids: list,
+        ignore_timeout: bool = True
     ) -> ti_response.Response:
         _, group_id = self.id.split(":")
         return super().make_link(
             entity_id=group_id,
             object_ids=object_ids,
+            ignore_timeout=ignore_timeout
         )
 
     def unlink(
         self,
         object_ids: list,
+        ignore_timeout: bool = True
     ) -> ti_response.Response:
         _, group_id = self.id.split(":")
         return super().unlink(
             entity_id=group_id,
             object_ids=object_ids,
+            ignore_timeout=ignore_timeout
         )

@@ -29,15 +29,22 @@ class IoCIPv6Entity(ioc.IoCIPv6, BaseIoCInterface):
     _entity_type = types.IoCTypes.ipv6
 
 
+class IoCEmailEntity(ioc.IoCEmail, BaseIoCInterface):
+    _resource = types.IoCTypes.email.value
+    _entity_type = types.IoCTypes.email
+
+
 IOC_TYPE_2_ENTITY_OBJECT = {
     types.IoCTypes.fqdn: IoCFQDNEntity,
     types.IoCTypes.ipv4: IoCIPv4Entity,
     types.IoCTypes.url: IoCURLEntity,
     types.IoCTypes.file: IoCFileEntity,
     types.IoCTypes.ipv6: IoCIPv6Entity,
+    types.IoCTypes.email: IoCEmailEntity,
     "fqdn": IoCFQDNEntity,
     "ipv4": IoCIPv4Entity,
     "url": IoCURLEntity,
     "file": IoCFileEntity,
     "ipv6": IoCIPv6Entity,
+    "email": IoCEmailEntity,
 }

@@ -1,6 +1,6 @@
 # Welcome to `bizone_ti` library!
 
-`bizone_ti` library provides the capability to work with API of the BI.ZONE Threat Intelligence.
+`bizone_ti` library provides the capability to work with API of the BI.ZONE Threat Intelligence Platform.
 
 # Context
 - [`IoC`](#ioc)
@@ -616,11 +616,7 @@ There are four possibilities for getting a group:
     **Description**: Direct search for particular group.\
     **Raw request to TI**: [Raw Request](http://gti.bi.zone/api/vulnerability/ti_group_id?ignore-timeout=True&removed-filter=not-removed&sort=asc&other-sources=True)
 
- -  via v;\
-    **Description**: Search by string.\
-    **Raw request to TI**: [Raw Request](http://gti.bi.zone/api/vulnerability?v=CVE-0000-00000&ignore-timeout=True&from=1619527873&to=1619627890&removed-filter=not-removed&sort=desc&q=%28%28category%3D%3D%22Phishing%22%7Ccategory%3D%3D%22Fraud%22%29%26%28tags%3D%3D%22malware%22%29%29&severity=80&sorces=test_ti_source&limit=200&other-sources=False)
-
--   via s;\
+ -   via s;\
     **Description**: Search by string in several fields depends on the group type.\
     **Raw request to TI**: [Raw Request](http://gti.bi.zone/api/vulnerability?s=CVE-0000-00000&ignore-timeout=True&from=1619527873&to=1619627890&removed-filter=not-removed&sort=desc&q=%28%28category%3D%3D%22Phishing%22%7Ccategory%3D%3D%22Fraud%22%29%26%28tags%3D%3D%22malware%22%29%29&severity=80&sorces=test_ti_source&limit=200&other-sources=False)
 
@@ -631,6 +627,8 @@ There are four possibilities for getting a group:
     **Raw request to TI**: [Raw Request](http://gti.bi.zone/api/vulnerability?ss=CVE-0000-00000&ignore-timeout=True&from=1619527873&to=1619627890&removed-filter=not-removed&sort=desc&q=%28%28category%3D%3D%22Phishing%22%7Ccategory%3D%3D%22Fraud%22%29%26%28tags%3D%3D%22malware%22%29%29&severity=80&sorces=test_ti_source&limit=200&other-sources=False)
 
     📝 Usually searching with `ss` key contains multiple responses. If you need more than one response better use [`Get multiple groups`](#get-multiple-groups).
+
+    📝 You can use the `motivation` parameter to search exclusively for group type `adversary`.
 
 ``` python
 import bizone_ti
@@ -663,24 +661,6 @@ received_group = bizone_ti.GroupManager(object_type=group_type).getone(
    other_sources=True
 )
 
-# via v
-# Most common way to search
-received_group = bizone_ti.GroupManager(object_type=group_type).getone(
-   v='CVE-0000-00000',
-   category=["Phishing", "Fraud"],
-   sources=["test_ti_source"],
-   severity=80,
-   tags=["malware"],
-   download_from=1619527873,
-   download_to=1619627890,
-   limit=200,
-   cursor=None,
-   sort='desc',
-   removed_filter='not-removed',
-   ignore_timeout=True,
-   other_sources=False,
-)
-
 # via s
 # This search key usually returns multiple responses.
 # If you use 'getone', it will return first response from the TI.
@@ -690,6 +670,7 @@ received_group = bizone_ti.GroupManager(object_type=group_type).getone(
    sources=["test_ti_source"],
    severity=80,
    tags=["malware"],
+   industry=["Other"],
    download_from=1619527873,
    download_to=1619627890,
    limit=200,
@@ -709,6 +690,7 @@ received_group = bizone_ti.GroupManager(object_type=group_type).getone(
    sources=["test_ti_source"],
    severity=80,
    tags=["malware"],
+   industry=["Other"],
    download_from=1619527873,
    download_to=1619627890,
    limit=200,
@@ -736,12 +718,6 @@ There are five possibilities for getting several groups:
 
    📝 Searching with `group_id` key contains one response. Better use [`Get first (one) group`](#get-first-one-group).
 
- - via v;\
-   **Description**: Search by string.\
-   **Raw request to TI**: [Example](http://gti.bi.zone/api/vulnerability?v=CVE-0000-00000&ignore-timeout=True&from=1619527873&to=1619627890&removed-filter=not-removed&sort=desc&q=%28%28category%3D%3D%22Phishing%22%7Ccategory%3D%3D%22Fraud%22%29%26%28tags%3D%3D%22malware%22%29%29&severity=80&sorces=test_ti_source&limit=200&other-sources=False)
-
-   📝 Searching with `v` key contains one response. Better use [`Get first (one) group`](#get-first-one-group).
-
  - via s;\
    **Description**: Search by string in several fields depends on the group type.\
    **Raw request to TI**: [Example](http://gti.bi.zone/api/vulnerability?s=CVE-0000-00000&ignore-timeout=True&from=1619527873&to=1619627890&removed-filter=not-removed&sort=desc&q=%28%28category%3D%3D%22Phishing%22%7Ccategory%3D%3D%22Fraud%22%29%26%28tags%3D%3D%22malware%22%29%29&severity=80&sorces=test_ti_source&limit=200&other-sources=False)
@@ -752,8 +728,9 @@ There are five possibilities for getting several groups:
 
  -   via only filters (good for searching all groups that match search filters).
 
-📝 See usage of common_id, v, s and ss at [`Get first (one) group`](#get-first-one-group).
+📝 See usage of group_id, s and ss at [`Get first (one) group`](#get-first-one-group).
 
+📝 You can use the `motivation` parameter to search exclusively for group type `adversary`.
 
 ``` python
 import bizone_ti
@@ -777,9 +754,12 @@ bizone_ti.setup.TILibConfig.setup(ti_url=ti_url, api_key=api_key)
 group_type = types.GroupTypes.adversary
 
 # Search only with filters 
+# You can use the `motivation` parameter to search exclusively for group type `adversary`.
 received_groups = bizone_ti.GroupManager(object_type=group_type).get(
    sources=["test"],
    tags=["Other"],
+   motivation=["cybercriminals"],
+   industry=["Other"],
    download_from=1519527873,
    download_to=1619627890,
    limit=200,
@@ -1090,9 +1070,9 @@ response = group.unlink(
 # Direct Query
 
 Direct Query (DQ) provides a HTTP interface for creating requests to the
-TI, including GET, POST, PATCH, PUT, and DELETE methods. Using
-DQ, you can construct any request to the TI as desired, but you
-won't receive object representations of the TI objects.
+TI platform, including GET, POST, PATCH, PUT, and DELETE methods. Using
+DQ, you can construct any request to the TI platform as desired, but you
+won't receive object representations of the TI platform objects.
 
 📝 Before using DQ, you need to set it up. For this purpose, you can use
 either bizone_ti.setup.DirectQueryConfig or bizone_ti.setup.TILibConfig.
@@ -1133,7 +1113,7 @@ status_code, dq_response = dq.get(
 ```
 
 `dq_response` variable type is dict.\
-The `dq_response` variable contains the raw response from the TI.\
+The `dq_response` variable contains the raw response from the TI platform.\
 `status_code` variable type is int.
 
 ## Get multiple data with DQ
@@ -1173,7 +1153,7 @@ status_code, dq_response = dq.get(
 ```
 
 `dq_response` variable type is dict.\
-The `dq_response` variable contains the raw response from the TI.
+The `dq_response` variable contains the raw response from the TI platform.
 
 ## Create data with DQ
 
@@ -1230,7 +1210,7 @@ status_code, dq_response = dq.post(
 ```
 
 `dq_response` variable type is dict.\
-The `dq_response` variable contains the raw response from the TI.\
+The `dq_response` variable contains the raw response from the TI platform.\
 `status_code` variable type is int.
 
 ## Patch data with DQ
@@ -1264,7 +1244,7 @@ status_code, dq_response = dq.patch(
 ```
 
 `dq_response` variable type is dict.\
-The `dq_response` variable contains the raw response from the TI.\
+The `dq_response` variable contains the raw response from the TI platform.\
 `status_code` variable type is int.
 
 ## Delete data with DQ
@@ -1296,7 +1276,7 @@ status_code, dq_response = dq.delete(
 ```
 
 `dq_response` variable type is str.\
-The `dq_response` variable contains the raw response from the TI.\
+The `dq_response` variable contains the raw response from the TI platform.\
 `status_code` variable type is int.
 
 
@@ -1415,7 +1395,7 @@ status_code, dq_response = dq.get(
 ```
 
 `dq_response` variable type is list.\
-The `dq_response` variable contains the raw response from the TI.\
+The `dq_response` variable contains the raw response from the TI platform.\
 `status_code` variable type is int.
 
 ## Upload file
@@ -1462,7 +1442,7 @@ status_code, dq_response = dq.post(
 ```
 
 `dq_response_upload` variable type is dict.\
-The `dq_response_upload` variable contains the raw response from the TI.
+The `dq_response_upload` variable contains the raw response from the TI platform.
 `dq_response` variable type is empty.\
-The `dq_response` variable contains the raw response from the TI.\
+The `dq_response` variable contains the raw response from the TI platform.\
 `status_code` variable type is int.

@@ -11,6 +11,7 @@ from bizone_ti.entities.ioc import (
     IoCURLEntity,
     IoCFileEntity,
     IoCIPv6Entity,
+    IoCEmailEntity,
     IOC_TYPE_2_ENTITY_OBJECT)
 from bizone_ti.entities.general import GeneralEntityIoC, GeneralEntityGroup
 
@@ -29,5 +30,6 @@ __all__ = [
     "GROUP_TYPE_2_ENTITY_OBJECT",
     "IOC_TYPE_2_ENTITY_OBJECT",
     "GeneralEntityIoC",
-    "GeneralEntityGroup"
+    "GeneralEntityGroup",
+    "IoCEmailEntity",
 ]

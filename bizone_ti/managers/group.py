@@ -3,7 +3,9 @@ from __future__ import annotations
 import logging
 import typing
 
+
 from bizone_ti.api import response as ti_response
+from bizone_ti.dm.common import types
 from bizone_ti.managers import base
 
 if typing.TYPE_CHECKING:
@@ -29,6 +31,8 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
         sources: list[str] = None,
         severity: int = None,
         tags: list[str] = None,
+        motivation: list[str] = None,
+        industry: list[str] = None,
         download_from: int = None,
         download_to: int = None,
         limit: int = None,
@@ -51,7 +55,7 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
             group_id (str, optional): Search by group id.
             Defaults to None.
             v (str, optional): Search by string.
-            Defaults to None.
+            Defaults to None. (Depricated)
             ss (str, optional): Search by substring.
             Defaults to None.
             s (str, optional): Search by string in several
@@ -60,6 +64,10 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
             sources (list[str], optional): _description_. Defaults to None.
             severity (int, optional): _description_. Defaults to None.
             tags (list[str], optional): _description_. Defaults to None.
+            motivation (list[str], optional): _description_. Defaults to None.
+            The parameter `motivation` can be used only for groups
+            of the `adversary` type.
+            industry (list[str], optional): _description_. Defaults to None.
             download_from (int, optional): _description_. Defaults to None.
             download_to (int, optional): _description_. Defaults to None.
             limit (int, optional): _description_. Defaults to None.
@@ -92,12 +100,31 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
             "limit": limit,
             "other-sources": other_sources,
             "cursor": cursor,
+            "motivation_type": motivation,
+            "industry": industry,
         }
+
+        if query_params['v']:
+            logger.warning(
+                "The parameter `v` was depricated for groups! Skip.")
+            del query_params['v']
+
+        if (
+            query_params['motivation_type'] and
+            self.entity_type.value != types.GroupTypes.adversary.value  # noqa E721
+        ):
+            logger.warning(
+                "The parameter `motivation` was depricated "
+                "for the group type `%s`! Skip.", (self.entity_type))
+            del query_params['motivation_type']
 
         response = super().getone(query_params, url_path=group_id)
         if "data" in response:
             if len(response["data"]) == 0:
                 return None
+            elif len(response["data"]) == 1:
+                return self.ti_object.from_ti(
+                    self.entity_type, response["data"][0])
             elif len(response["data"]) > 1:
                 logger.warning('Get more than one response')
                 return self.ti_object.from_ti(
@@ -116,6 +143,8 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
         sources: list[str] = None,
         severity: int = None,
         tags: list[str] = None,
+        motivation: list[str] = None,
+        industry: list[str] = None,
         download_from: int = None,
         download_to: int = None,
         limit: int = None,
@@ -129,7 +158,7 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
 
         Args:
             group_id (str, optional): Search by group id.
-            v (str, optional): Search by string. Defaults to None.
+            v (str, optional): Search by string. Defaults to None. (Depricated)
             ss (str, optional): Search by substring.
             Defaults to None.
             s (str, optional): Search by string in
@@ -138,6 +167,10 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
             sources (list[str], optional): _description_. Defaults to None.
             severity (int, optional): _description_. Defaults to None.
             tags (list[str], optional): _description_. Defaults to None.
+            motivation (list[str], optional): _description_. Defaults to None.
+            The parameter `motivation` can be used only for groups
+            of the `adversary` type.
+            industry (list[str], optional): _description_. Defaults to None.
             download_from (int, optional): _description_. Defaults to None.
             download_to (int, optional): _description_. Defaults to None.
             limit (int, optional): _description_. Defaults to None.
@@ -163,12 +196,28 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
             "sort": sort,
             "category": category,
             "severity": severity,
-            "sorces": sources,
+            "sources": sources,
             "tags": tags,
             "limit": limit,
             "other-sources": other_sources,
             "cursor": cursor,
+            "motivation_type": motivation,
+            "industry": industry,
         }
+
+        if query_params['v']:
+            logger.warning(
+                "The parameter `v` was depricated for groups! Skip.")
+            del query_params['v']
+
+        if (
+            query_params['motivation_type'] and
+            self.entity_type.value != types.GroupTypes.adversary.value  # noqa E721
+        ):
+            logger.warning(
+                "The parameter `motivation` was depricated "
+                "for group type `% s`! Skip.", (self.entity_type))
+            del query_params['motivation_type']
 
         return super().get(
             url_path=group_id,
@@ -201,12 +250,14 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
         cursor: str = None,
         limit: int = None,
         removed: bool = False,
+        ignore_timeout: bool = True
     ) -> ti_response.ResponseGenerator:
         return super().linked(
             entity_id=group_id,
             cursor=cursor,
             limit=limit,
-            removed=removed
+            removed=removed,
+            ignore_timeout=ignore_timeout
         )
 
     def delete(self, group_id: str) -> ti_response.Response:
