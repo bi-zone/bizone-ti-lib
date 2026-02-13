@@ -359,11 +359,15 @@ linked_to_ioc = bizone_ti.IoCManager(object_type=ioc_type).linked(
      common_id=entity_id,
      cursor=None,
      limit=200,
-     removed=False  # unfortunately, doesn't work at TI
+     removed=False
  )
 ```
 
 `linked_to_ioc` type is ti_reponse.ResponseGenerator.
+
+📝  The parameter `removed` set to True will return
+    all IOCs, including archived ones.
+
 
 ### Get linked via IoCEntity
 
@@ -395,11 +399,15 @@ ioc = bizone_ti.IoCManager(object_type=ioc_type).getone(
 linked_to_ioc = ioc.linked(
      cursor=None,
      limit=200,
-     removed=False  # unfortunately, doesn't work at TI
+     removed=False
  )
 ```
 
 `linked_to_ioc` type is ti_reponse.ResponseGenerator.
+
+📝  The parameter `removed` set to True will return
+    all IOCs, including archived ones.
+
 
 ## Link objects to IOC
 
@@ -874,11 +882,15 @@ response = bizone_ti.GroupManager(object_type=group_type).linked(
    group_id='ti_group_id',  # group.id is tool:ti_group_id
      cursor='',
      limit=100,
-     removed=False,  # unfortunately, doesn't work at TI
+     removed=False,
 )
 ```
 
 `response` is instance of ti_reponse.ResponseGenerator.
+
+📝  The parameter `removed` set to True will return
+    all IOCs, including archived ones.
+
 
 ### Get linked via GroupEntity
 
@@ -909,11 +921,15 @@ group = bizone_ti.GroupManager(object_type=group_type).getone(
 response = group.linked(
    cursor='',
    limit=100,
-   removed=False,  # unfortunately, doesn't work at TI
+   removed=False,
 )
 ```
 
 `response` is instance of ti_reponse.ResponseGenerator.
+
+📝  The parameter `removed` set to True will return
+    all IOCs, including archived ones.
+
 
 ## Link objects to group
 

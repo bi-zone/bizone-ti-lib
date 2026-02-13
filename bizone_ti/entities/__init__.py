@@ -4,6 +4,7 @@ from bizone_ti.entities.group import (
     GroupMalwareEntity,
     GroupToolEntity,
     GroupGeneralEntity,
+    GroupAttackEntity,
     GROUP_TYPE_2_ENTITY_OBJECT)
 from bizone_ti.entities.ioc import (
     IoCFQDNEntity,
@@ -32,4 +33,5 @@ __all__ = [
     "GeneralEntityIoC",
     "GeneralEntityGroup",
     "IoCEmailEntity",
+    "GroupAttackEntity",
 ]
