@@ -1,5 +1,7 @@
 import typing
 
+from .utils import get_valid_ti_url
+
 
 class TIConfig:
     TI_URL = None
@@ -14,5 +16,5 @@ class TIConfig:
     def setup(self,
               ti_url: typing.Union[str, None] = None,
               api_key: typing.Union[str, None] = None) -> None:
-        self.TI_URL = ti_url
+        self.TI_URL = get_valid_ti_url(ti_url)
         self.API_KEY = api_key

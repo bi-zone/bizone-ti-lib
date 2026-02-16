@@ -8,6 +8,7 @@ from bizone_ti.entities import (
     GroupToolEntity,
     GroupMalwareEntity,
     GroupVulnerabilityEntity,
+    GroupAttackEntity,
     GROUP_TYPE_2_ENTITY_OBJECT)
 
 from bizone_ti.entities import (
@@ -161,6 +162,17 @@ class GeneralEntityGroup:
         skip_mismatched_types: bool = False,
     ) -> GroupVulnerabilityEntity: ...
 
+    @typing.overload
+    @classmethod
+    def from_ti(  # noqa: E704
+        cls,
+        entity_type: typing.Literal[
+            types.GroupTypes.attack,
+            "attack"],
+        raw_data: dict,
+        skip_mismatched_types: bool = False,
+    ) -> GroupAttackEntity: ...
+
     @classmethod
     def from_ti(  # noqa: E704
         cls,
@@ -174,6 +186,7 @@ class GeneralEntityGroup:
         GroupToolEntity,
         GroupMalwareEntity,
         GroupVulnerabilityEntity,
+        GroupAttackEntity,
         None
     ]:
         return GROUP_TYPE_2_ENTITY_OBJECT[entity_type].from_dict(

@@ -14,7 +14,9 @@ if typing.TYPE_CHECKING:
         GroupGeneralEntity,
         GroupToolEntity,
         GroupMalwareEntity,
-        GroupVulnerabilityEntity,)
+        GroupVulnerabilityEntity,
+        GroupAttackEntity,
+    )
 
 
 logger = logging.getLogger(__name__)
@@ -47,6 +49,7 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
         GroupToolEntity,
         GroupMalwareEntity,
         GroupVulnerabilityEntity,
+        GroupAttackEntity,
         None
     ]:
         """This method uses for getting one element from TI by string.
@@ -81,7 +84,7 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
             Defaults to True.
         Returns:
             GroupAdversaryEntity|GroupGeneralEntity|GroupToolEntity|
-            GroupMalwareEntity|GroupVulnerabilityEntity|None
+            GroupMalwareEntity|GroupVulnerabilityEntity|GroupAttackEntity|None
         """
 
         query_params = {
@@ -228,13 +231,14 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
     def add(
         self,
         data: typing.Union[dict, None] = None,
-        convert_2_ti_object: bool = True
+        convert_2_ti_object: bool = True,
+        rewrite: bool = False
     ) -> ti_response.Response:
 
         query_params = {
             "take-screen": True,
             "return-result": True,
-            "rewrite": False,
+            "rewrite": rewrite,
         }
 
         return super().add(

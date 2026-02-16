@@ -62,7 +62,8 @@ class GroupTool(models.BaseGroup):
     services_drivers: list[str]
     file_masks: list[str]
     ttps: list[models.TTPSData]
-    platforms: list[str] = dataclasses.field(default_factory=lambda: [])
+    legitimacy: str
+    platform: list[str] = dataclasses.field(default_factory=lambda: [])
 
 
 @dataclasses.dataclass
@@ -72,12 +73,26 @@ class GroupGeneral(models.BaseGroup):
     category: list[str]
 
 
+@dataclasses.dataclass
+class GroupAttack(models.BaseGroup):
+    _: dataclasses.KW_ONLY
+    coa: str
+    external_class: list[str]
+    geo: list[str]
+    attacked: str
+    mitre_phases: list[str]
+    threat_level: str
+    category: list[str]
+    extended_description_exists: bool
+
+
 Group_Entity_2_TIObject = {
     "vulnerability": GroupVulnerability,
     "adversary": GroupAdversary,
     "malware": GroupMalware,
     "tool": GroupTool,
     "general": GroupGeneral,
+    "attack": GroupAttack,
 }
 
 
@@ -91,8 +106,9 @@ class Group:
                     GroupAdversary,
                     GroupMalware,
                     GroupTool,
-                    GroupGeneral
-                    ]:
+                    GroupGeneral,
+                    GroupAttack
+    ]:
         entity = raw_data["entity"]
         return Group_Entity_2_TIObject[entity].from_dict(
             raw_data,

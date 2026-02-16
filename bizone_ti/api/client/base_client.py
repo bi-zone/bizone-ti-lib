@@ -36,7 +36,7 @@ class BaseAPIClient(http_session.HttpSessionMixin):
         response = self.session.post(url, **kwargs)
         if (response.status_code not in
            setup.TIHTTPSessionConfig.HTTP_SUCCESS_CODES):
-            logger.info(
+            logger.debug(
                 "POST %s kwargs %s STATUS_CODE %d response %s",
                 url,
                 kwargs,

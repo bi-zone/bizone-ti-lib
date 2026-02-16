@@ -44,15 +44,25 @@ class GroupGeneralEntity(
     _entity_type = types.GroupTypes.general
 
 
+class GroupAttackEntity(
+    group.GroupAttack,
+    BaseGroupInterface
+):
+    _resource = types.GroupTypes.attack.value
+    _entity_type = types.GroupTypes.attack
+
+
 GROUP_TYPE_2_ENTITY_OBJECT = {
     types.GroupTypes.adversary: GroupAdversaryEntity,
     types.GroupTypes.general: GroupGeneralEntity,
     types.GroupTypes.malware: GroupMalwareEntity,
     types.GroupTypes.tool: GroupToolEntity,
     types.GroupTypes.vulnerability: GroupVulnerabilityEntity,
+    types.GroupTypes.attack: GroupAttackEntity,
     "adversary": GroupAdversaryEntity,
     "general": GroupGeneralEntity,
     "malware": GroupMalwareEntity,
     "tool": GroupToolEntity,
     "vulnerability": GroupVulnerabilityEntity,
+    "attack": GroupAttackEntity,
 }
