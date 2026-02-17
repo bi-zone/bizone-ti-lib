@@ -2,6 +2,14 @@
 
 `bizone_ti` library provides the capability to work with API of the BI.ZONE Threat Intelligence Platform.
 
+
+# Prerequisites
+
+Before installing, please ensure you have the following installed:
+
+*   Python: version 3.11 or higher
+
+
 # Context
 - [`IoC`](#ioc)
    - [`Get first (one) IOC`](#get-first-one-ioc)
