@@ -1,2 +1,2 @@
-requests==2.32.3 # Apache 2.0
-ujson==5.10.0 # BSD
+requests >= 2.32.2, < 2.34.3 # Apache 2.0
+ujson >= 5.10.0, < 5.12.2 # BSD-3

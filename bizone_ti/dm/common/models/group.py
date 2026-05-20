@@ -38,6 +38,7 @@ class BaseGroup(base.BaseDMManager):
     linked_group_count: int
     linked_ioc_count: int
     mitre_attack: list[str]
+    extended_description_exists: bool
     services: list[str] = dataclasses.field(default_factory=lambda: [])
     hidden: bool = dataclasses.field(default=False)
     user_viewed: bool = dataclasses.field(default=False)

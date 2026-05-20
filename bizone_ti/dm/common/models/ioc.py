@@ -102,6 +102,7 @@ class BaseIoC(base.BaseDMManager):
     entity: types.IoCTypes
     common_id: str
     state: str
+    updated: int = dataclasses.field(default=0)
     feedback: FeedBack = dataclasses.field(default_factory=lambda: [0, 0])
     files_count: int = dataclasses.field(default=0)
     severity: int = dataclasses.field(default=0)
