@@ -83,7 +83,7 @@ class GroupAttack(models.BaseGroup):
     mitre_phases: list[str]
     threat_level: str
     category: list[str]
-    extended_description_exists: bool
+    extended_description_exists: bool = dataclasses.field(default=False)
 
 
 Group_Entity_2_TIObject = {

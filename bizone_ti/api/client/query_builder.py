@@ -13,6 +13,8 @@ class ApiQueryBuilder:
                                       "tags"),
             "confidence": lambda confidence_level: (
                 f"confidence>={confidence_level}"),
+            "severity": lambda severity_level: (
+                f"severity>={severity_level}"),
             "false_positive": lambda fp: "" if fp else "!false_positive",
             "motivation_type": functools.partial(self._get_formatted_filter,
                                                  "motivation_type"),
