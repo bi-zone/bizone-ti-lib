@@ -45,7 +45,7 @@ class BaseObjectPropertyManager:
 
     def add(
         self,
-        data: list[dict],
+        data: list[dict] | dict,
         query_params=None,
         url_path="add",
         convert_2_ti_object=True,
@@ -142,6 +142,16 @@ class BaseObjectPropertyManager:
 
     def delete(self, **kwargs):
         return self.manager.delete(**kwargs)
+
+    def update(self,
+               resource: str,
+               data: list[dict] | dict,
+               entity_id: str | None = None,
+               ) -> ti_response.Response:
+        return self.manager.update(
+            entity_id=entity_id,
+            resource=resource,
+            payload=data)
 
 
 class BaseIoCEntityManager(BaseObjectPropertyManager):

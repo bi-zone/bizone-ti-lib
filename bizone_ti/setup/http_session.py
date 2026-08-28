@@ -39,6 +39,16 @@ class HTTPSessionConfig:
     ) -> None:
         self.HTTP_PROXY = http_proxy
         self.HTTPS_PROXY = https_proxy
-        self.RETRY_TIMES = retry_times or self.RETRY_TIMES
-        self.BACKOFF_FACTOR = backoff_factor or self.BACKOFF_FACTOR
-        self.STATUS_FORCELIST = status_forcelist or self.STATUS_FORCELIST
+
+        self.RETRY_TIMES = (
+            retry_times if retry_times is not None else self.RETRY_TIMES)
+
+        self.BACKOFF_FACTOR = (
+            backoff_factor
+            if backoff_factor is not None
+            else self.BACKOFF_FACTOR)
+
+        self.STATUS_FORCELIST = (
+            status_forcelist
+            if status_forcelist is not None
+            else self.STATUS_FORCELIST)

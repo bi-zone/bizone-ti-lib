@@ -29,6 +29,7 @@ class ConverterDM:
         value: typing.Any,
         skip_mismatched_types: bool = False
     ) -> typing.Any:
+
         if isinstance(to_type, types.GenericAlias):
             origin_type = typing.get_origin(to_type)
 
@@ -39,7 +40,6 @@ class ConverterDM:
             nested_types = typing.get_args(to_type)
 
             if len(nested_types) > 1:
-                # TODO: Should we support more than one nested types?
                 raise exceptions.TooManyArgsToProcess(
                     obj=origin_type, arguments=nested_types
                 )
@@ -67,6 +67,16 @@ class ConverterDM:
                 ]
 
             return [convert_to_type(val) for val in value]
+
+        elif typing.get_origin(to_type):
+            expected_types = typing.get_args(to_type)
+
+            if float in expected_types:
+                expected_types += (int,)
+
+            for expected_type in expected_types:
+                if isinstance(value, expected_type):
+                    return value
 
         elif isinstance(value, to_type):
             return value
@@ -133,8 +143,6 @@ class ConverterDM:
 
 class BaseDMManager:
     """Base Data Model Manager uses for extending dm dataclasses only."""
-
-    RAW_DATA: typing.Union[str, None] = None
 
     @classmethod
     def fields(cls) -> typing.Sequence[str]:

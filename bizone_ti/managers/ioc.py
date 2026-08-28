@@ -291,3 +291,12 @@ class IoCObjectsManager(base.BaseObjectPropertyManager):
             entity_id=common_id,
             object_ids=object_ids,
         )
+
+    def update(self,
+               data: list[dict],
+               ) -> ti_response.Response:
+        return super().update(
+            resource=self.resource,
+            data=data,
+            entity_id=None,
+        )

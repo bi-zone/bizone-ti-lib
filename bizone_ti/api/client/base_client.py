@@ -54,7 +54,7 @@ class BaseAPIClient(http_session.HttpSessionMixin):
         response = self.session.patch(url, **kwargs)
         if (response.status_code not in
            setup.TIHTTPSessionConfig.HTTP_SUCCESS_CODES):
-            logger.info(
+            logger.debug(
                 "PATCH %s kwargs %s STATUS_CODE %d response %s",
                 url,
                 kwargs,
@@ -72,7 +72,7 @@ class BaseAPIClient(http_session.HttpSessionMixin):
         response = self.session.put(url, **kwargs)
         if (response.status_code not in
            setup.TIHTTPSessionConfig.HTTP_SUCCESS_CODES):
-            logger.info(
+            logger.debug(
                 "PATCH %s kwargs %s STATUS_CODE %d response %s",
                 url,
                 kwargs,
@@ -90,7 +90,7 @@ class BaseAPIClient(http_session.HttpSessionMixin):
         response = self.session.delete(url, **kwargs)
         if (response.status_code not in
            setup.TIHTTPSessionConfig.HTTP_SUCCESS_CODES):
-            logger.info(
+            logger.debug(
                 "DELETE %s STATUS_CODE %d response %s",
                 url,
                 response.status_code,

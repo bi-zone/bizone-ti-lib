@@ -5,19 +5,11 @@ import typing
 from bizone_ti.api import request
 from bizone_ti.api import response as ti_reponse
 
+
 from bizone_ti.typings.abstract_entities import GeneralEntities
 
 
-class ApiManager:
-    """Singleton"""
-
-    def __new__(cls: ApiManager) -> typing.Self:
-        if not hasattr(cls, "instance"):
-            cls.instance: typing.Self = super(ApiManager, cls).__new__(cls)
-        return cls.instance
-
-    def __init__(self) -> None:
-        self.request: request.Request = request.Request()
+class BaseApiManager:
 
     def count(self,
               resource: str,
@@ -50,7 +42,7 @@ class ApiManager:
         raw_responses: bool = False,
         params: typing.Union[dict, None] = None,
         convert_to_type: typing.Union[GeneralEntities, None] = None
-       ) -> ti_reponse.ResponseGenerator:
+    ) -> ti_reponse.ResponseGenerator:
         req_hook = self.request.get_hook(resource, url_path)
 
         return ti_reponse.ResponseGenerator(
@@ -126,8 +118,46 @@ class ApiManager:
             entity_type=entity_type,
             params=params)
 
+    def update(self,
+               entity_id: str,
+               resource: str,
+               payload: list[dict] | dict,
+               params: typing.Union[dict, None] = None,
+               ) -> ti_reponse.Response:
 
-class IoCApiManager(ApiManager):
+        status_code, response = self.request.patch_resource(
+            resource=resource,
+            url_path=f"{entity_id}",
+            params=params,
+            payload=payload)
+
+        return ti_reponse.Response(
+            ti_object=None,
+            response=response,
+            status_code=status_code,
+            convert_2_ti_object=False,
+        )
+
+
+class ApiManager(BaseApiManager):
+    def __new__(cls: ApiManager) -> typing.Self:
+        if not hasattr(cls, "instance"):
+            cls.instance: typing.Self = super(ApiManager, cls).__new__(cls)
+        return cls.instance
+
+    def __init__(self) -> None:
+        self.request: request.Request = request.Request()
+
+
+class IoCApiManager(BaseApiManager):
+    def __new__(cls: IoCApiManager) -> typing.Self:
+        if not hasattr(cls, "instance"):
+            cls.instance: typing.Self = super(IoCApiManager, cls).__new__(cls)
+        return cls.instance
+
+    def __init__(self) -> None:
+        self.request: request.Request = request.Request()
+
     def delete(self,
                resource: str,
                payload: typing.Union[dict, None] = None,
@@ -138,6 +168,26 @@ class IoCApiManager(ApiManager):
             params=None,
             payload=payload
         )
+
+        return ti_reponse.Response(
+            ti_object=None,
+            response=response,
+            status_code=status_code,
+            convert_2_ti_object=False,
+        )
+
+    def update(self,
+               resource: str,
+               payload: list[dict] | dict,
+               entity_id: None = None,
+               params: typing.Union[dict, None] = None,
+               ) -> ti_reponse.Response:
+
+        status_code, response = self.request.post_resource(
+            resource=resource,
+            url_path="update",
+            params=params,
+            payload=payload)
 
         return ti_reponse.Response(
             ti_object=None,

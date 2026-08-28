@@ -1,24 +1,13 @@
 import dataclasses
 
 
-from bizone_ti.dm.common import (
-    industries,
-    mitre_phases,
-)
 from bizone_ti.dm.common import base
 from bizone_ti.dm.common import types
 
 
 @dataclasses.dataclass
-class Reason(base.BaseDMManager):
-    rule_id: str = dataclasses.field(default="")
-    processor: str = dataclasses.field(default="")
-    rule_name: str = dataclasses.field(default="")
-
-
-@dataclasses.dataclass
 class IP(base.BaseDMManager):
-    ip: str
+    ip: str = ""
 
     def to_dict(self) -> str:
         return self.ip
@@ -26,7 +15,7 @@ class IP(base.BaseDMManager):
 
 @dataclasses.dataclass
 class Port(base.BaseDMManager):
-    port: str
+    port: int = 0
 
     def to_dict(self) -> int:
         return int(self.port)
@@ -34,7 +23,7 @@ class Port(base.BaseDMManager):
 
 @dataclasses.dataclass
 class FQDN(base.BaseDMManager):
-    fqdn: str
+    fqdn: str = ""
 
     def to_dict(self) -> str:
         return self.fqdn
@@ -42,7 +31,7 @@ class FQDN(base.BaseDMManager):
 
 @dataclasses.dataclass
 class URL(base.BaseDMManager):
-    url: str
+    url: str = ""
 
     def to_dict(self) -> str:
         return self.url
@@ -50,125 +39,113 @@ class URL(base.BaseDMManager):
 
 @dataclasses.dataclass
 class FileName(base.BaseDMManager):
-    name: str
+    name: str = ""
 
     def to_dict(self) -> str:
         return self.name
 
 
-@dataclasses.dataclass
-class FeedBack(base.BaseDMManager):
-    like: bool = dataclasses.field(default=False)
-    dislike: bool = dataclasses.field(default=False)
-
-    def to_dict(self) -> list[int, int]:
-        return [int(self.like), int(self.dislike)]
-
-
-@dataclasses.dataclass
+@dataclasses.dataclass(kw_only=True)
 class CommonIoCData(base.BaseDMManager):
-    _: dataclasses.KW_ONLY
-    tlp: str
-    tti_organization: str
-    user_viewed: bool
-    hidden: bool
-    mitre_phases: list[mitre_phases.MitrePhases]
-    industry: list[industries.Industries]
+    tlp: str = ""
+    tti_organization: str = ""
+    user_viewed: bool = False
+    hidden: bool = False
+    mitre_phases: list[str] = dataclasses.field(
+        default_factory=lambda: [])
+    industry: list[str] = dataclasses.field(
+        default_factory=lambda: [])
     id: str
-    updated: int
-    threat_name: list[str]
+    updated: int = 0
+    threat_name: list[str] = dataclasses.field(default_factory=lambda: [])
     source: str
-    description: str
-    tags: list[str]
-    details: dict
-    category: list[str]
-    ttl: int
+    description: str = ""
+    tags: list[str] = dataclasses.field(default_factory=lambda: [])
+    details: dict = dataclasses.field(default_factory=lambda: {})
+    category: list[str] = dataclasses.field(default_factory=lambda: [])
+    ttl: int = 0
     value: str
-    removed_manually: bool
-    false_positive: bool
-    created: int
+    removed_manually: bool = False
+    false_positive: bool = False
+    created: int = 0
     services: list[str] = dataclasses.field(default_factory=lambda: [])
-    last_seen: int = dataclasses.field(default=0)
-    first_seen: int = dataclasses.field(default=0)
-    risk_score: int = dataclasses.field(default=0)
-    removed: bool = dataclasses.field(default=False)
-    confidence: int = dataclasses.field(default=0)
+    last_seen: int = 0
+    first_seen: int = 0
+    risk_score: int = 0
+    removed: bool = False
+    confidence: int = 0
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(kw_only=True)
 class BaseIoC(base.BaseDMManager):
-    _: dataclasses.KW_ONLY
     value: str
     entity: types.IoCTypes
     common_id: str
-    state: str
-    updated: int = dataclasses.field(default=0)
-    feedback: FeedBack = dataclasses.field(default_factory=lambda: [0, 0])
-    files_count: int = dataclasses.field(default=0)
-    severity: int = dataclasses.field(default=0)
-    comment_count: int = dataclasses.field(default=0)
-    linked_group_count: int = dataclasses.field(default=0)
-    linked_ioc_count: int = dataclasses.field(default=0)
+    state: str = ""
+    updated: int = 0
+    feedback: list[int] = dataclasses.field(default_factory=lambda: [0, 0])
+    files_count: int = 0
+    severity: int = 0
+    comment_count: int = 0
+    linked_group_count: int = 0
+    linked_ioc_count: int = 0
 
 
 @dataclasses.dataclass
 class IoCURLData(CommonIoCData):
-    duplicate_url: str
-    files: list[str]
-    ips: list[IP]
-    original_value: str
-    protocol: str
-    referer: str
-    telegram_id: str
-    telegram_nick: list[str]
+    duplicate_url: str = ""
+    files: list[str] = dataclasses.field(default_factory=lambda: [])
+    ips: list[IP] = dataclasses.field(default_factory=lambda: [])
+    original_value: str = ""
+    protocol: str = ""
+    referer: str = ""
+    telegram_id: str = ""
+    telegram_nick: list[str] = dataclasses.field(default_factory=lambda: [])
 
 
 @dataclasses.dataclass
 class IoCFQDNData(CommonIoCData):
-    ips: list[IP]
-    original_value: str
-    referer: str
+    ips: list[IP] = dataclasses.field(default_factory=lambda: [])
+    original_value: str = ""
+    referer: str = ""
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(kw_only=True)
 class IoCIPv4Data(CommonIoCData):
-    _: dataclasses.KW_ONLY
-    asn: str
-    fqdns: list[FQDN]
-    port: list[Port]
+    asn: str = ""
+    fqdns: list[FQDN] = dataclasses.field(default_factory=lambda: [])
+    port: list[Port] = dataclasses.field(default_factory=lambda: [])
 
 
 @dataclasses.dataclass
 class IoCFileData(CommonIoCData):
-    extension: str
-    file_name: list[FileName]
-    fqdns: list[FQDN]
-    ips: list[IP]
-    md5: str
-    path: str
-    sha1: str
-    sha256: str
-    sha512: str
-    ssdeep: str
-    urls: list[URL]
-    vt_score_malicious: int
-    file_size: int = dataclasses.field(default=0)
-    vt_score_total: int = dataclasses.field(default=0)
+    extension: str = ""
+    file_name: list[FileName] = dataclasses.field(default_factory=lambda: [])
+    fqdns: list[FQDN] = dataclasses.field(default_factory=lambda: [])
+    ips: list[IP] = dataclasses.field(default_factory=lambda: [])
+    md5: str = ""
+    path: str = ""
+    sha1: str = ""
+    sha256: str = ""
+    sha512: str = ""
+    ssdeep: str = ""
+    urls: list[URL] = dataclasses.field(default_factory=lambda: [])
+    vt_score_malicious: int = 0
+    file_size: int = 0
+    vt_score_total: int = 0
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(kw_only=True)
 class IoCIPv6Data(CommonIoCData):
-    _: dataclasses.KW_ONLY
-    asn: str
-    fqdns: list[FQDN]
-    port: list[Port]
+    asn: str = ""
+    fqdns: list[FQDN] = dataclasses.field(default_factory=lambda: [])
+    port: list[Port] = dataclasses.field(default_factory=lambda: [])
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(kw_only=True)
 class IoCEmailData(CommonIoCData):
-    _: dataclasses.KW_ONLY
     attachments: list[str] = dataclasses.field(default_factory=lambda: [])
-    body: str = dataclasses.field(default="")
+    body: str = ""
     sender_servers: list[str] = dataclasses.field(default_factory=lambda: [])
-    urls: list[URL]
+    urls: list[URL] = dataclasses.field(default_factory=lambda: [])
     header: list[str] = dataclasses.field(default_factory=lambda: [])

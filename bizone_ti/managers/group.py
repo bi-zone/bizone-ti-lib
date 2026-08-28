@@ -232,13 +232,11 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
         self,
         data: typing.Union[dict, None] = None,
         convert_2_ti_object: bool = True,
-        rewrite: bool = False
     ) -> ti_response.Response:
 
         query_params = {
             "take-screen": True,
             "return-result": True,
-            "rewrite": rewrite,
         }
 
         return super().add(
@@ -285,4 +283,14 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
         return super().unlink(
             entity_id=group_id,
             object_ids=object_ids,
+        )
+
+    def update(self,
+               group_id: str,
+               data: dict,
+               ) -> ti_response.Response:
+        return super().update(
+            resource=self.resource,
+            data=data,
+            entity_id=group_id,
         )

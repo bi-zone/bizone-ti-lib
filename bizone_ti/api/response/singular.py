@@ -13,9 +13,8 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(kw_only=True)
 class ResponseRejectionObj:
-    _: dataclasses.KW_ONLY
     id: str = dataclasses.field(default='')
     source: str = dataclasses.field(default='')
     value: str = dataclasses.field(default='')
@@ -25,9 +24,8 @@ class ResponseRejectionObj:
     message: str = dataclasses.field(default='')
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(kw_only=True)
 class ResponseExistObj:
-    _: dataclasses.KW_ONLY
     id: str = dataclasses.field(default='')
     entity: str = dataclasses.field(default='')
     value: str = dataclasses.field(default='')

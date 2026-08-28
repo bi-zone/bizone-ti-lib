@@ -1,15 +1,14 @@
 from .group import (
     TTPSData,
     BaseGroup,
+    AffectedProducts,
 )
 from .ioc import (
-    Reason,
     IP,
     Port,
     FQDN,
     URL,
     FileName,
-    FeedBack,
     IoCURLData,
     IoCFQDNData,
     IoCIPv4Data,
@@ -21,13 +20,11 @@ from .ioc import (
 
 
 __all__ = [
-    "Reason",
     "IP",
     "Port",
     "FQDN",
     "URL",
     "FileName",
-    "FeedBack",
     "IoCURLData",
     "IoCFQDNData",
     "IoCIPv4Data",
@@ -37,4 +34,5 @@ __all__ = [
     "BaseGroup",
     "TTPSData",
     "IoCEmailData",
+    "AffectedProducts",
 ]
