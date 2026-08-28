@@ -17,5 +17,24 @@ class ApiWrappersMixin:
             if setup.TIHTTPSessionConfig.HTTPS_PROXY:
                 self.session.proxies.update(
                     {'https': setup.TIHTTPSessionConfig.HTTPS_PROXY})
+
+            adapter_https = self.session.adapters.get('https://')
+            if adapter_https:
+                adapter_https.max_retries.total = (
+                    setup.TIHTTPSessionConfig.RETRY_TIMES)
+                adapter_https.max_retries.backoff_factor = (
+                    setup.TIHTTPSessionConfig.BACKOFF_FACTOR)
+                adapter_https.max_retries.status_forcelist = (
+                    setup.TIHTTPSessionConfig.STATUS_FORCELIST)
+
+            adapter_http = self.session.adapters.get('http://')
+            if adapter_http:
+                adapter_http.max_retries.total = (
+                    setup.TIHTTPSessionConfig.RETRY_TIMES)
+                adapter_http.max_retries.backoff_factor = (
+                    setup.TIHTTPSessionConfig.BACKOFF_FACTOR)
+                adapter_http.max_retries.status_forcelist = (
+                    setup.TIHTTPSessionConfig.STATUS_FORCELIST)
+
             return func(self, *args, **kwargs)
         return wrapper

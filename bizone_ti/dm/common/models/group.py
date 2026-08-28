@@ -1,46 +1,71 @@
 import dataclasses
 
 
-from bizone_ti.dm.common import (
-    industries,
-)
 from bizone_ti.dm.common import base
 from bizone_ti.dm.common import types
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(kw_only=True)
+class Affected(base.BaseDMManager):
+    bounds: list[str] = dataclasses.field(default_factory=lambda: [])
+    relation: str = ""
+
+    def to_dict(self) -> str:
+        return {
+            "bounds": self.bounds,
+            "relation": self.relation
+        }
+
+
+@dataclasses.dataclass(kw_only=True)
+class AffectedProducts(base.BaseDMManager):
+    vendor: str = ""
+    product: str = ""
+    platforms: list[str] = dataclasses.field(default_factory=lambda: [])
+    affected: list[Affected] = dataclasses.field(default_factory=lambda: [])
+
+    def to_dict(self) -> str:
+        return {
+            "vendor": self.vendor,
+            "product": self.product,
+            "platforms": self.platforms,
+            "affected":
+                [affected_item.to_dict() for affected_item in self.affected]
+        }
+
+
+@dataclasses.dataclass(kw_only=True)
 class TTPSData(base.BaseDMManager):
-    _: dataclasses.KW_ONLY
     mitre_technique_id: str = dataclasses.field(default=None)
     procedure: str = dataclasses.field(default=None)
     command: str = dataclasses.field(default=None)
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(kw_only=True)
 class BaseGroup(base.BaseDMManager):
-    _: dataclasses.KW_ONLY
     entity: types.GroupTypes
-    name: str
-    tlp: str
-    industry: list[industries.Industries]
-    updated: int
-    date: int
-    created: int
-    source: str
-    state: str
-    tti_organization: str
-    description: str
-    comment_count: int
-    tags: list[str]
-    files_count: int
+    name: str = ""
+    tlp: str = ""
+    industry: list[str] = dataclasses.field(
+        default_factory=lambda: [])
+    updated: int = 0
+    date: int = 0
+    created: int = 0
+    source: str = ""
+    state: str = ""
+    tti_organization: str = ""
+    description: str = ""
+    comment_count: int = 0
+    tags: list[str] = dataclasses.field(default_factory=lambda: [])
+    files_count: int = 0
     id: str
-    details: dict
-    linked_group_count: int
-    linked_ioc_count: int
-    mitre_attack: list[str]
-    extended_description_exists: bool
+    details: dict = dataclasses.field(default_factory=lambda: {})
+    linked_group_count: int = 0
+    linked_ioc_count: int = 0
+    mitre_attack: list[str] = dataclasses.field(default_factory=lambda: [])
+    extended_description_exists: bool = False
     services: list[str] = dataclasses.field(default_factory=lambda: [])
-    hidden: bool = dataclasses.field(default=False)
-    user_viewed: bool = dataclasses.field(default=False)
-    removed_manually: bool = dataclasses.field(default=False)
-    removed: bool = dataclasses.field(default=False)
+    hidden: bool = False
+    user_viewed: bool = False
+    removed_manually: bool = False
+    removed: bool = False

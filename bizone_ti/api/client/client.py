@@ -6,6 +6,10 @@ from bizone_ti.api.client import query_builder
 
 
 class ApiClient(base_client.BaseAPIClient):
+    def __new__(cls: "ApiClient") -> typing.Self:
+        if not hasattr(cls, "instance"):
+            cls.instance: typing.Self = super(ApiClient, cls).__new__(cls)
+        return cls.instance
 
     def __init__(self, headers: typing.Union[dict, None] = None) -> None:
         self.build_params: dict = (
@@ -14,11 +18,11 @@ class ApiClient(base_client.BaseAPIClient):
         super().__init__(headers=headers)
 
     def get(
-       self,
-       uri: str,
-       headers: typing.Union[dict, None] = None,
-       params: typing.Union[dict, None] = None,
-       **kwargs) -> tuple[int, typing.Union[str, dict]]:
+            self,
+            uri: str,
+            headers: typing.Union[dict, None] = None,
+            params: typing.Union[dict, None] = None,
+            **kwargs) -> tuple[int, typing.Union[str, dict]]:
         headers = headers or {
             "Authorization": f"Bearer {setup.TILibConfig.API_KEY}"}
 
@@ -30,12 +34,12 @@ class ApiClient(base_client.BaseAPIClient):
         )
 
     def post(
-       self,
-       uri: str,
-       headers: typing.Union[dict, None] = None,
-       params: typing.Union[dict, None] = None,
-       payload: typing.Union[dict, None] = None,
-       **kwargs) -> tuple[int, typing.Union[str, dict]]:
+            self,
+            uri: str,
+            headers: typing.Union[dict, None] = None,
+            params: typing.Union[dict, None] = None,
+            payload: typing.Union[dict, None] = None,
+            **kwargs) -> tuple[int, typing.Union[str, dict]]:
         headers = headers or {
             "Authorization": f"Bearer {setup.TILibConfig.API_KEY}"}
 

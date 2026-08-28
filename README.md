@@ -15,6 +15,7 @@ Before installing, please ensure you have the following installed:
    - [`Get first (one) IOC`](#get-first-one-ioc)
    - [`Get multiple IOCs`](#get-multiple-iocs)
    - [`Add IOC`](#add-ioc)
+   - [`Update IOC`](#update-ioc)
    - [`Delete IOC`](#delete-ioc)
    - [`Get linked objects to IOC`](#get-linked-objects-to-ioc)
       - [`via IoCManager`](#get-linked-via-iocmanager)
@@ -31,6 +32,7 @@ Before installing, please ensure you have the following installed:
    - [`Get first (one) group`](#get-first-one-group)
    - [`Get multiple groups`](#get-multiple-groups)
    - [`Add group`](#add-group)
+   - [`Update group`](#update-group)
    - [`Get linked objects to group`](#get-linked-objects-to-group)
       - [`via GroupManager`](#get-linked-via-groupmanager)
       - [`via GroupEntity`](#get-linked-via-groupentity)
@@ -266,7 +268,6 @@ bizone_ti.setup.TILibConfig.setup(ti_url=ti_url, api_key=api_key)
 
 new_ioc_data = {
              "value": "new_domain.example",
-             "services": [],
              "user_viewed": True,
              "hidden": True,
              "mitre_phases": [],
@@ -279,7 +280,6 @@ new_ioc_data = {
              "removed_manually": True,
              "source": "test",
              "tlp": "green",
-             "tti_organization": "",
              "description": "test description",
              "tags": [],
              "confidence": 0,
@@ -303,6 +303,40 @@ response = bizone_ti.IoCManager(
 ```
 
 `response` type is ti_response.Response.
+
+
+# Update IOC
+
+```python
+import bizone_ti
+
+from bizone_ti.dm.common import types
+
+
+ti_url = '' # ti url
+api_key = '' # your api key
+
+# setup http session
+bizone_ti.setup.TIHTTPSessionConfig.setup(
+      http_proxy='', # set necessary http proxy
+      https_proxy='' # set necessary https proxy
+   )
+
+# setup lib
+bizone_ti.setup.TILibConfig.setup(ti_url=ti_url, api_key=api_key)
+
+response = bizone_ti.IoCManager(object_type=ioc_type).update(
+   data=[
+      {
+         'id': 'ioc_common_id',
+         'source': 'some_source',
+         'description': 'Test description'
+      }])
+
+```
+
+`response` type is ti_response.Response.
+
 
 ## Delete IOC
 
@@ -819,7 +853,6 @@ group_type = types.GroupTypes.adversary
 
 new_adversary_group = {
      "aliases": [],
-     "services": [],
      "name": str(uuid.uuid4()),
      "user_viewed": False,
      "geo": [],
@@ -834,7 +867,6 @@ new_adversary_group = {
      "tlp": "green",
      "victims": [],
      "motivation_type": [],
-     "state": "new",
      "description": "test description",
      "tags": [],
      "hidden": True,
@@ -851,6 +883,43 @@ response = bizone_ti.GroupManager(object_type=group_type).add(
 ```
 
 `response` is instance of ti_response.Response.
+
+
+## Update group
+
+📝 For group objects supports only vulnerability, malware, tool, adversary,
+general types.
+
+```python
+import uuid
+
+import bizone_ti
+from bizone_ti.dm.common import types
+
+
+ti_url = '' # ti url
+api_key = '' # your api key
+
+# setup http session
+bizone_ti.setup.TIHTTPSessionConfig.setup(
+      http_proxy='', # set necessary http proxy
+      https_proxy='' # set necessary https proxy
+   )
+
+# setup lib
+bizone_ti.setup.TILibConfig.setup(ti_url=ti_url, api_key=api_key)
+
+ # group_type can also be str (expl: group_type = 'adversary')
+group_type = types.GroupTypes.vulnerability
+
+response = bizone_ti.GroupManager(object_type=group_type).update(
+   group_id=group_id,
+   data={"description": "Test description"},
+)
+```
+
+`response` is instance of ti_response.Response.
+
 
 ## Get linked objects to group
 
@@ -1190,7 +1259,6 @@ from bizone_ti.dm.common import types
 ioc_type = types.IoCTypes.url
 new_ioc = {
                "value": "http://url.url",
-               "services": [],
                "user_viewed": True,
                "hidden": True,
                "mitre_phases": [],
@@ -1202,7 +1270,6 @@ new_ioc = {
                "threat_name": [],
                "source": "test",
                "tlp": "green",
-               "tti_organization": "",
                "description": "test description",
                "tags": ["test"],
                "confidence": 0,

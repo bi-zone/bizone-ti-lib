@@ -6,6 +6,11 @@ from bizone_ti.api import client
 
 
 class Request:
+    def __new__(cls: "Request") -> typing.Self:
+        if not hasattr(cls, "instance"):
+            cls.instance: typing.Self = super(Request, cls).__new__(cls)
+        return cls.instance
+
     def __init__(self) -> None:
         self.api_client: client.ApiClient = client.ApiClient()
 
