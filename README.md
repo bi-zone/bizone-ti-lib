@@ -42,6 +42,7 @@ Before installing, please ensure you have the following installed:
    - [`Unlink objects with group`](#unlink-objects-with-group)
       - [`via GroupManager`](#unlink-via-groupmanager)
       - [`via GroupEntity`](#unlink-via-groupentity)
+   - [`Get the extended description of the group`](#get-the-extended-description-of-the-group)
 - [`Direct Query`](#direct-query)
    - [`Get data with DQ`](#get-data-with-dq)
    - [`Get multiple data with DQ`](#get-multiple-data-with-dq)
@@ -678,7 +679,9 @@ There are four possibilities for getting a group:
 
     📝 Usually searching with `ss` key contains multiple responses. If you need more than one response better use [`Get multiple groups`](#get-multiple-groups).
 
-    📝 You can use the `motivation` parameter to search exclusively for group type `adversary`.
+    📝 You can use the `motivation` parameter to search exclusively for the `adversary` group type.
+
+    📝 You can use the `geo` parameter to search exclusively for the `adversary` and `attack` group types.
 
 ``` python
 import bizone_ti
@@ -780,7 +783,9 @@ There are five possibilities for getting several groups:
 
 📝 See usage of group_id, s and ss at [`Get first (one) group`](#get-first-one-group).
 
-📝 You can use the `motivation` parameter to search exclusively for group type `adversary`.
+📝 You can use the `motivation` parameter to search exclusively for the `adversary` group type.
+
+📝 You can use the `geo` parameter to search exclusively for the `adversary` and `attack` group types.
 
 ``` python
 import bizone_ti
@@ -804,11 +809,13 @@ bizone_ti.setup.TILibConfig.setup(ti_url=ti_url, api_key=api_key)
 group_type = types.GroupTypes.adversary
 
 # Search only with filters 
-# You can use the `motivation` parameter to search exclusively for group type `adversary`.
+# You can use the `motivation` parameter to search exclusively for the `adversary` group type.
+# You can use the `geo` parameter to search exclusively for the `adversary` and `attack` group types.
 received_groups = bizone_ti.GroupManager(object_type=group_type).get(
    sources=["test"],
    tags=["Other"],
    motivation=["cybercriminals"],
+   geo=['uk'],
    industry=["Other"],
    download_from=1519527873,
    download_to=1619627890,
@@ -1158,6 +1165,41 @@ response = group.unlink(
 ```
 
 `response` is instance of ti_reponse.Response.
+
+### Get the extended description of the group
+
+``` python
+import bizone_ti
+from bizone_ti.dm.common import types
+
+
+ti_url = '' # ti url
+api_key = '' # your api key
+
+# setup http session
+bizone_ti.setup.TIHTTPSessionConfig.setup(
+      http_proxy='', # set necessary http proxy
+      https_proxy='' # set necessary https proxy
+   )
+
+# setup lib
+bizone_ti.setup.TILibConfig.setup(ti_url=ti_url, api_key=api_key)
+
+# group_type can also be str (expl: group_type = 'attack')
+group_type = types.GroupTypes.attack
+
+setup.TILibConfig.setup(ti_url=dev_ti_url, api_key=api_key)
+
+# The group is an instance of one of the supported GroupEntity types.
+group = bizone_ti.GroupManager(object_type=group_type).getone(
+   group_id='ti_group_id')  # group.id is attack:ti_group_id
+
+ext_description = group.extended_description()
+```
+
+`ext_description` is a string containing the extended description.
+
+📝 The `extended_description` method may raise a requests.exceptions.HTTPError if no extended description is available.
 
 
 # Direct Query

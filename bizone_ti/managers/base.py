@@ -249,3 +249,10 @@ class BaseGroupEntityManager(BaseObjectPropertyManager):
             object_ids=object_ids,
             ignore_timeout=ignore_timeout
         )
+
+    def extended_description(self) -> ti_response.Response:
+        _, group_id = self.id.split(":")
+        return super().getone(
+            query_params=None,
+            url_path=f"/{group_id}/extended-description",
+        )

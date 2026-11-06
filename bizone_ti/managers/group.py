@@ -34,6 +34,7 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
         severity: int = None,
         tags: list[str] = None,
         motivation: list[str] = None,
+        geo: list[str] = None,
         industry: list[str] = None,
         download_from: int = None,
         download_to: int = None,
@@ -70,6 +71,9 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
             motivation (list[str], optional): _description_. Defaults to None.
             The parameter `motivation` can be used only for groups
             of the `adversary` type.
+            geo (list[str], optional): _description_. Defaults to None.
+            The parameter `geo` can be used only for groups
+            of the `adversary` and the 'attack' type.
             industry (list[str], optional): _description_. Defaults to None.
             download_from (int, optional): _description_. Defaults to None.
             download_to (int, optional): _description_. Defaults to None.
@@ -104,6 +108,7 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
             "other-sources": other_sources,
             "cursor": cursor,
             "motivation_type": motivation,
+            "geo": [g.lower() for g in geo] if geo else None,
             "industry": industry,
         }
 
@@ -120,6 +125,17 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
                 "The parameter `motivation` was depricated "
                 "for the group type `%s`! Skip.", (self.entity_type))
             del query_params['motivation_type']
+
+        if (
+            query_params['geo'] and
+            self.entity_type.value not in (types.GroupTypes.adversary.value,
+                                           types.GroupTypes.attack.value,)  # noqa E721
+        ):
+            logger.warning(
+                "The parameter `geo` was depricated "
+                "for the group type `%s`! Skip.", (self.entity_type))
+
+            del query_params['geo']
 
         response = super().getone(query_params, url_path=group_id)
         if "data" in response:
@@ -147,6 +163,7 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
         severity: int = None,
         tags: list[str] = None,
         motivation: list[str] = None,
+        geo: list[str] = None,
         industry: list[str] = None,
         download_from: int = None,
         download_to: int = None,
@@ -173,6 +190,9 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
             motivation (list[str], optional): _description_. Defaults to None.
             The parameter `motivation` can be used only for groups
             of the `adversary` type.
+            geo (list[str], optional): _description_. Defaults to None.
+            The parameter `geo` can be used only for groups
+            of the `adversary` and the 'attack' type.
             industry (list[str], optional): _description_. Defaults to None.
             download_from (int, optional): _description_. Defaults to None.
             download_to (int, optional): _description_. Defaults to None.
@@ -205,6 +225,7 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
             "other-sources": other_sources,
             "cursor": cursor,
             "motivation_type": motivation,
+            "geo": [g.lower() for g in geo] if geo else None,
             "industry": industry,
         }
 
@@ -221,6 +242,17 @@ class GroupObjectsManager(base.BaseObjectPropertyManager):
                 "The parameter `motivation` was depricated "
                 "for group type `% s`! Skip.", (self.entity_type))
             del query_params['motivation_type']
+
+        if (
+            query_params['geo'] and
+            self.entity_type.value not in (types.GroupTypes.adversary.value,
+                                           types.GroupTypes.attack.value,)  # noqa E721
+        ):
+            logger.warning(
+                "The parameter `geo` was depricated "
+                "for the group type `%s`! Skip.", (self.entity_type))
+
+            del query_params['geo']
 
         return super().get(
             url_path=group_id,

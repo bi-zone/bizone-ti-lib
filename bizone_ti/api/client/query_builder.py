@@ -20,6 +20,8 @@ class ApiQueryBuilder:
                                                  "motivation_type"),
             "industry": functools.partial(self._get_formatted_filter,
                                           "industry"),
+            "geo": functools.partial(self._get_formatted_filter,
+                                     "geo"),
         }
 
     @staticmethod
