@@ -19,11 +19,11 @@ class BaseAPIClient(http_session.HttpSessionMixin):
     def get(self,
             url: str,
             **kwargs: dict) -> tuple[int, typing.Union[str, dict]]:
-        logger.debug("GET %s kwargs %s", url, kwargs)
+        logger.debug("GET %s params %s", url, kwargs.get("params", {}))
         response = self.session.get(url, **kwargs)
         logger.debug(
-            "GET %s kwargs %s STATUS_CODE %d",
-            url, kwargs, response.status_code
+            "GET %s params %s STATUS_CODE %d",
+            url, kwargs.get("params", {}), response.status_code
         )
         response.raise_for_status()
         return response.status_code, utils.try_convert_to_json(response.text)
@@ -32,14 +32,14 @@ class BaseAPIClient(http_session.HttpSessionMixin):
     def post(self,
              url: str,
              **kwargs: dict) -> tuple[int, typing.Union[str, dict]]:
-        logger.debug("POST %s kwargs %s", url, kwargs)
+        logger.debug("POST %s params %s", url, kwargs.get("params", {}))
         response = self.session.post(url, **kwargs)
         if (response.status_code not in
            setup.TIHTTPSessionConfig.HTTP_SUCCESS_CODES):
             logger.debug(
-                "POST %s kwargs %s STATUS_CODE %d response %s",
+                "POST %s params %s STATUS_CODE %d response %s",
                 url,
-                kwargs,
+                kwargs.get("params", {}),
                 response.status_code,
                 response.text,
             )
@@ -50,14 +50,14 @@ class BaseAPIClient(http_session.HttpSessionMixin):
     def patch(self,
               url: str,
               **kwargs: dict) -> tuple[int, typing.Union[str, dict]]:
-        logger.debug("PATCH %s kwargs %s", url, kwargs)
+        logger.debug("PATCH %s params %s", url, kwargs.get("params", {}))
         response = self.session.patch(url, **kwargs)
         if (response.status_code not in
            setup.TIHTTPSessionConfig.HTTP_SUCCESS_CODES):
             logger.debug(
-                "PATCH %s kwargs %s STATUS_CODE %d response %s",
+                "PATCH %s params %s STATUS_CODE %d response %s",
                 url,
-                kwargs,
+                kwargs.get("params", {}),
                 response.status_code,
                 response.text,
             )
@@ -68,14 +68,14 @@ class BaseAPIClient(http_session.HttpSessionMixin):
     def put(self,
             url: str,
             **kwargs: dict) -> tuple[int, typing.Union[str, dict]]:
-        logger.debug("PATCH %s kwargs %s", url, kwargs)
+        logger.debug("PUT %s params %s", url, kwargs.get("params", {}))
         response = self.session.put(url, **kwargs)
         if (response.status_code not in
            setup.TIHTTPSessionConfig.HTTP_SUCCESS_CODES):
             logger.debug(
-                "PATCH %s kwargs %s STATUS_CODE %d response %s",
+                "PUT %s params %s STATUS_CODE %d response %s",
                 url,
-                kwargs,
+                kwargs.get("params", {}),
                 response.status_code,
                 response.text,
             )
@@ -86,7 +86,7 @@ class BaseAPIClient(http_session.HttpSessionMixin):
     def delete(self,
                url: str,
                **kwargs: dict) -> tuple[int, typing.Union[str, dict]]:
-        logger.debug("DELETE %s kwargs %s", url, **kwargs)
+        logger.debug("DELETE %s params %s", url, kwargs.get("params", {}))
         response = self.session.delete(url, **kwargs)
         if (response.status_code not in
            setup.TIHTTPSessionConfig.HTTP_SUCCESS_CODES):

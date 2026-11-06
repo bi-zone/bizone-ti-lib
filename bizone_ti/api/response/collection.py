@@ -16,19 +16,19 @@ logger = logging.getLogger(__name__)
 
 
 class ResponseGenerator:
-    """A generator which yeild information from TI"""
+    """A generator which yields data from the TI"""
 
     MAX_CHUNK = 300
     PAGES_PER_DOWNLOAD = 10
 
     def __init__(
-       self,
-       request_hook: functools.partial,
-       entity_type: typing.Union[str, None] = None,
-       params: typing.Union[dict, None] = None,
-       executor: typing.Union[typing.Callable, None] = None,
-       raw_responses: bool = False,
-       convert_to_type: typing.Union[GeneralEntities, None] = None) -> None:
+            self,
+            request_hook: functools.partial,
+            entity_type: typing.Union[str, None] = None,
+            params: typing.Union[dict, None] = None,
+            executor: typing.Union[typing.Callable, None] = None,
+            raw_responses: bool = False,
+            convert_to_type: typing.Union[GeneralEntities, None] = None) -> None:
 
         self.__processed: int = 0
         self.request_hook: functools.partial = request_hook
@@ -88,7 +88,7 @@ class ResponseGenerator:
         return self
 
     def __next__(self):
-        if self.__break_iteration:
+        if len(self.buffer) == 0 and self.__break_iteration:
             raise StopIteration
 
         if len(self.buffer) == 0:
@@ -110,8 +110,7 @@ class ResponseGenerator:
             if len(responses) == 0:
                 raise StopIteration
 
-            for response in responses:
-                self.buffer.append(response)
+            self.buffer.extend(responses)
 
         raw_item = self.buffer.popleft()
         self.processed += 1
